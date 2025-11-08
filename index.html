@@ -6,8 +6,6 @@
     <title>Hotel Nirvana - Luxury Redefined</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -17,17 +15,93 @@
             --accent-color: #2d3748;
         }
         
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+        
         .hero-section {
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
             background-size: cover;
             background-position: center;
             height: 90vh;
+            display: flex;
+            align-items: center;
         }
         
-        .card-hover:hover {
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        .card-3d {
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .card-3d:hover {
+            transform: translateY(-15px) rotateX(5deg);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .card-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.5s ease;
+        }
+        
+        .card-3d:hover .card-image {
+            transform: scale(1.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        
+        .btn-gold {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .btn-gold:hover {
+            background-color: #b8941f;
+            color: white;
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+        
+        .page-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .page-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         .admin-panel {
@@ -45,71 +119,15 @@
             color: white;
             text-decoration: none;
             display: block;
-            padding: 10px 15px;
+            padding: 12px 15px;
             border-radius: 5px;
             margin-bottom: 5px;
+            transition: all 0.3s ease;
         }
         
         .sidebar a:hover, .sidebar a.active {
             background-color: var(--secondary-color);
             color: var(--primary-color);
-        }
-        
-        .form-control:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25);
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
-        }
-        
-        .btn-gold {
-            background-color: var(--secondary-color);
-            color: var(--primary-color);
-        }
-        
-        .btn-gold:hover {
-            background-color: #b8941f;
-            color: white;
-        }
-        
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background-color: var(--secondary-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-        }
-        
-        .page-section {
-            display: none;
-        }
-        
-        .page-section.active {
-            display: block;
-        }
-        
-        .room-card, .hall-card {
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-        
-        .room-image, .hall-image {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
         }
         
         .amenities-list {
@@ -119,6 +137,8 @@
         
         .amenities-list li {
             margin-bottom: 8px;
+            display: flex;
+            align-items: center;
         }
         
         .amenities-list li:before {
@@ -128,17 +148,101 @@
             margin-right: 10px;
         }
         
-        .booking-form {
+        .filter-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .hall-tabs .nav-link {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .hall-tabs .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .contact-info-card {
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            padding: 30px;
+            padding: 25px;
+            height: 100%;
+        }
+        
+        .team-member {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .team-member img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            border: 5px solid var(--secondary-color);
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            transition: color 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .admin-section {
+            display: none;
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
+        .stats-card {
+            border-radius: 10px;
+            color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stats-card i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .modal-content {
+            border-radius: 10px;
+            border: none;
+        }
+        
+        .modal-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25);
         }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: var(--primary-color);">
         <div class="container">
             <a class="navbar-brand" href="#" onclick="showPage('home')">
                 <i class="fas fa-hotel me-2"></i>Hotel Nirvana
@@ -176,13 +280,13 @@
     <!-- Home Page -->
     <section id="home" class="page-section active">
         <!-- Hero Section -->
-        <div class="hero-section d-flex align-items-center">
+        <div class="hero-section">
             <div class="container text-white text-center">
                 <h1 class="display-3 fw-bold mb-4">Welcome to Hotel Nirvana</h1>
-                <p class="lead mb-4">Experience luxury and comfort like never before</p>
+                <p class="lead mb-4">Experience luxury and comfort like never before at our premium hotel destination</p>
                 <div class="d-flex justify-content-center gap-3 flex-wrap">
-                    <button class="btn btn-lg btn-gold" onclick="showPage('rooms')">Book a Room</button>
-                    <button class="btn btn-lg btn-outline-light" onclick="showPage('halls')">Book a Hall</button>
+                    <button class="btn btn-lg btn-gold px-4 py-2" onclick="showPage('rooms')">Book a Room</button>
+                    <button class="btn btn-lg btn-outline-light px-4 py-2" onclick="showPage('halls')">Book a Hall</button>
                 </div>
             </div>
         </div>
@@ -195,21 +299,21 @@
                         <i class="fas fa-concierge-bell fa-2x text-white"></i>
                     </div>
                     <h4>Luxury Rooms</h4>
-                    <p>Elegantly designed rooms with premium amenities for a comfortable stay.</p>
+                    <p class="text-muted">Elegantly designed rooms with premium amenities for a comfortable stay.</p>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="feature-icon">
                         <i class="fas fa-glass-cheers fa-2x text-white"></i>
                     </div>
                     <h4>Event Spaces</h4>
-                    <p>Perfect venues for weddings, conferences, and special celebrations.</p>
+                    <p class="text-muted">Perfect venues for weddings, conferences, and special celebrations.</p>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="feature-icon">
                         <i class="fas fa-parking fa-2x text-white"></i>
                     </div>
                     <h4>Ample Parking</h4>
-                    <p>Secure and spacious parking area for all our guests.</p>
+                    <p class="text-muted">Secure and spacious parking area for all our guests.</p>
                 </div>
             </div>
         </div>
@@ -222,7 +326,7 @@
                     <!-- Featured rooms will be loaded here by JavaScript -->
                 </div>
                 <div class="text-center mt-4">
-                    <button class="btn btn-primary" onclick="showPage('rooms')">View All Rooms</button>
+                    <button class="btn btn-primary px-4" onclick="showPage('rooms')">View All Rooms</button>
                 </div>
             </div>
         </div>
@@ -234,25 +338,48 @@
             <h1 class="text-center mb-5">Our Rooms</h1>
             
             <!-- Room Filters -->
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <input type="text" class="form-control" id="room-search" placeholder="Search rooms...">
+            <div class="filter-section">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label for="room-search" class="form-label">Search Rooms</label>
+                        <input type="text" class="form-control" id="room-search" placeholder="Search by name...">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="room-type-filter" class="form-label">Room Type</label>
+                        <select class="form-select" id="room-type-filter">
+                            <option value="all">All Room Types</option>
+                            <option value="single">Single</option>
+                            <option value="double">Double</option>
+                            <option value="suite">Suite</option>
+                            <option value="deluxe">Deluxe</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="price-range" class="form-label">Price Range</label>
+                        <select class="form-select" id="price-range">
+                            <option value="all">All Prices</option>
+                            <option value="0-150">$0 - $150</option>
+                            <option value="151-250">$151 - $250</option>
+                            <option value="251-500">$251 - $500</option>
+                            <option value="501+">$501+</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="room-capacity-filter" class="form-label">Capacity</label>
+                        <select class="form-select" id="room-capacity-filter">
+                            <option value="all">Any Capacity</option>
+                            <option value="1">1 Person</option>
+                            <option value="2">2 People</option>
+                            <option value="3">3 People</option>
+                            <option value="4+">4+ People</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <select class="form-select" id="room-type-filter">
-                        <option value="">All Room Types</option>
-                        <option value="single">Single</option>
-                        <option value="double">Double</option>
-                        <option value="suite">Suite</option>
-                        <option value="deluxe">Deluxe</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-select" id="price-sort">
-                        <option value="">Sort by Price</option>
-                        <option value="low">Low to High</option>
-                        <option value="high">High to Low</option>
-                    </select>
+                <div class="row mt-2">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-primary me-2" onclick="applyRoomFilters()">Apply Filters</button>
+                        <button class="btn btn-outline-secondary" onclick="resetRoomFilters()">Reset Filters</button>
+                    </div>
                 </div>
             </div>
             
@@ -268,13 +395,47 @@
         <div class="container py-5">
             <h1 class="text-center mb-5">Our Halls</h1>
             
+            <!-- Hall Filters -->
+            <div class="filter-section">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="hall-search" class="form-label">Search Halls</label>
+                        <input type="text" class="form-control" id="hall-search" placeholder="Search by name...">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="hall-type-filter" class="form-label">Hall Type</label>
+                        <select class="form-select" id="hall-type-filter">
+                            <option value="all">All Hall Types</option>
+                            <option value="conference">Conference Halls</option>
+                            <option value="party">Party Halls</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="hall-capacity-filter" class="form-label">Capacity</label>
+                        <select class="form-select" id="hall-capacity-filter">
+                            <option value="all">Any Capacity</option>
+                            <option value="0-50">Up to 50 people</option>
+                            <option value="51-100">51 - 100 people</option>
+                            <option value="101-200">101 - 200 people</option>
+                            <option value="201+">201+ people</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-primary me-2" onclick="applyHallFilters()">Apply Filters</button>
+                        <button class="btn btn-outline-secondary" onclick="resetHallFilters()">Reset Filters</button>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Halls Tabs -->
-            <ul class="nav nav-tabs justify-content-center mb-4" id="hallsTab">
+            <ul class="nav nav-pills hall-tabs justify-content-center mb-4" id="hallsTab">
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#conference">Conference Halls</a>
+                    <a class="nav-link active" data-bs-toggle="pill" href="#conference">Conference Halls</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#party">Party Halls</a>
+                    <a class="nav-link" data-bs-toggle="pill" href="#party">Party Halls</a>
                 </li>
             </ul>
             
@@ -305,22 +466,22 @@
             <div class="row align-items-center mb-5">
                 <div class="col-md-6">
                     <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
-                         alt="Hotel Exterior" class="img-fluid rounded">
+                         alt="Hotel Exterior" class="img-fluid rounded shadow">
                 </div>
                 <div class="col-md-6">
-                    <h2>Our Story</h2>
+                    <h2 class="mb-3">Our Story</h2>
                     <p>Established in 2005, Hotel Nirvana has been providing exceptional hospitality experiences for nearly two decades. Our commitment to luxury, comfort, and personalized service has made us a preferred choice for travelers and event organizers alike.</p>
                     <p>Located in the heart of the city, we offer easy access to business districts, shopping centers, and cultural attractions while providing a peaceful retreat from the bustling city life.</p>
                 </div>
             </div>
             
-            <div class="row align-items-center flex-row-reverse">
+            <div class="row align-items-center flex-row-reverse mb-5">
                 <div class="col-md-6">
                     <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
-                         alt="Hotel Interior" class="img-fluid rounded">
+                         alt="Hotel Interior" class="img-fluid rounded shadow">
                 </div>
                 <div class="col-md-6">
-                    <h2>Our Mission</h2>
+                    <h2 class="mb-3">Our Mission</h2>
                     <p>At Hotel Nirvana, our mission is to create unforgettable experiences for our guests by providing exceptional service, luxurious accommodations, and state-of-the-art facilities.</p>
                     <p>We strive to be more than just a place to stay - we aim to be a destination where memories are made, business is conducted, and relaxation is guaranteed.</p>
                 </div>
@@ -330,27 +491,27 @@
             <div class="mt-5">
                 <h2 class="text-center mb-4">Our Team</h2>
                 <div class="row">
-                    <div class="col-md-3 text-center mb-4">
+                    <div class="col-md-3 team-member">
                         <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
-                             alt="General Manager" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                             alt="General Manager">
                         <h5>John Smith</h5>
                         <p class="text-muted">General Manager</p>
                     </div>
-                    <div class="col-md-3 text-center mb-4">
+                    <div class="col-md-3 team-member">
                         <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
-                             alt="Head of Hospitality" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                             alt="Head of Hospitality">
                         <h5>Sarah Johnson</h5>
                         <p class="text-muted">Head of Hospitality</p>
                     </div>
-                    <div class="col-md-3 text-center mb-4">
+                    <div class="col-md-3 team-member">
                         <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
-                             alt="Events Manager" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                             alt="Events Manager">
                         <h5>Michael Brown</h5>
                         <p class="text-muted">Events Manager</p>
                     </div>
-                    <div class="col-md-3 text-center mb-4">
+                    <div class="col-md-3 team-member">
                         <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
-                             alt="Head Chef" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                             alt="Head Chef">
                         <h5>Emily Davis</h5>
                         <p class="text-muted">Head Chef</p>
                     </div>
@@ -366,7 +527,7 @@
             
             <div class="row">
                 <div class="col-md-8">
-                    <div class="booking-form">
+                    <div class="contact-info-card">
                         <h3 class="mb-4">Send us a Message</h3>
                         <form id="contact-form">
                             <div class="row">
@@ -393,7 +554,7 @@
                 </div>
                 
                 <div class="col-md-4">
-                    <div class="bg-light p-4 rounded">
+                    <div class="contact-info-card">
                         <h4 class="mb-4">Contact Information</h4>
                         
                         <div class="d-flex mb-3">
@@ -430,11 +591,11 @@
                         
                         <div class="mt-4">
                             <h6>Follow Us</h6>
-                            <div class="d-flex gap-3 mt-2">
-                                <a href="#" class="text-primary"><i class="fab fa-facebook fa-2x"></i></a>
-                                <a href="#" class="text-primary"><i class="fab fa-twitter fa-2x"></i></a>
-                                <a href="#" class="text-primary"><i class="fab fa-instagram fa-2x"></i></a>
-                                <a href="#" class="text-primary"><i class="fab fa-linkedin fa-2x"></i></a>
+                            <div class="social-icons mt-2">
+                                <a href="#"><i class="fab fa-facebook"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
                             </div>
                         </div>
                     </div>
@@ -443,7 +604,7 @@
             
             <!-- Map -->
             <div class="mt-5">
-                <div class="bg-light p-4 rounded">
+                <div class="contact-info-card">
                     <h4 class="mb-3">Find Us</h4>
                     <div class="ratio ratio-16x9">
                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.9503398796587!2d-73.99104868459418!3d40.74255177932881!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a3c1dc303b%3A0x9f03dcea7c0d6f3a!2sTimes%20Square%2C%20New%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1622549402951!5m2!1sen!2sin" 
@@ -478,67 +639,35 @@
                     <!-- Main Content -->
                     <div class="col-md-9 col-lg-10 p-4">
                         <!-- Dashboard -->
-                        <div id="admin-dashboard" class="admin-section">
+                        <div id="admin-dashboard" class="admin-section active">
                             <h2 class="mb-4">Dashboard</h2>
                             <div class="row">
                                 <div class="col-md-3 mb-4">
-                                    <div class="card bg-primary text-white">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between">
-                                                <div>
-                                                    <h4 id="total-rooms">0</h4>
-                                                    <p>Total Rooms</p>
-                                                </div>
-                                                <div class="align-self-center">
-                                                    <i class="fas fa-bed fa-2x"></i>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="stats-card bg-primary">
+                                        <i class="fas fa-bed"></i>
+                                        <h3 id="total-rooms">0</h3>
+                                        <p>Total Rooms</p>
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-4">
-                                    <div class="card bg-success text-white">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between">
-                                                <div>
-                                                    <h4 id="total-halls">0</h4>
-                                                    <p>Total Halls</p>
-                                                </div>
-                                                <div class="align-self-center">
-                                                    <i class="fas fa-door-open fa-2x"></i>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="stats-card bg-success">
+                                        <i class="fas fa-door-open"></i>
+                                        <h3 id="total-halls">0</h3>
+                                        <p>Total Halls</p>
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-4">
-                                    <div class="card bg-warning text-white">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between">
-                                                <div>
-                                                    <h4 id="active-bookings">0</h4>
-                                                    <p>Active Bookings</p>
-                                                </div>
-                                                <div class="align-self-center">
-                                                    <i class="fas fa-calendar-check fa-2x"></i>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="stats-card bg-warning">
+                                        <i class="fas fa-calendar-check"></i>
+                                        <h3 id="active-bookings">0</h3>
+                                        <p>Active Bookings</p>
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-4">
-                                    <div class="card bg-info text-white">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between">
-                                                <div>
-                                                    <h4 id="total-amenities">0</h4>
-                                                    <p>Total Amenities</p>
-                                                </div>
-                                                <div class="align-self-center">
-                                                    <i class="fas fa-concierge-bell fa-2x"></i>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="stats-card bg-info">
+                                        <i class="fas fa-concierge-bell"></i>
+                                        <h3 id="total-amenities">0</h3>
+                                        <p>Total Amenities</p>
                                     </div>
                                 </div>
                             </div>
@@ -546,8 +675,8 @@
                             <div class="row mt-4">
                                 <div class="col-md-6">
                                     <div class="card">
-                                        <div class="card-header">
-                                            <h5>Recent Bookings</h5>
+                                        <div class="card-header bg-primary text-white">
+                                            <h5 class="mb-0">Recent Bookings</h5>
                                         </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
@@ -570,8 +699,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="card">
-                                        <div class="card-header">
-                                            <h5>Quick Actions</h5>
+                                        <div class="card-header bg-primary text-white">
+                                            <h5 class="mb-0">Quick Actions</h5>
                                         </div>
                                         <div class="card-body">
                                             <div class="d-grid gap-2">
@@ -587,7 +716,7 @@
                         </div>
                         
                         <!-- Rooms Management -->
-                        <div id="admin-rooms-management" class="admin-section" style="display: none;">
+                        <div id="admin-rooms-management" class="admin-section">
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <h2>Rooms Management</h2>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRoomModal">
@@ -620,7 +749,7 @@
                         </div>
                         
                         <!-- Halls Management -->
-                        <div id="admin-halls-management" class="admin-section" style="display: none;">
+                        <div id="admin-halls-management" class="admin-section">
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <h2>Halls Management</h2>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addHallModal">
@@ -654,7 +783,7 @@
                         </div>
                         
                         <!-- Amenities Management -->
-                        <div id="admin-amenities-management" class="admin-section" style="display: none;">
+                        <div id="admin-amenities-management" class="admin-section">
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <h2>Amenities Management</h2>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAmenityModal">
@@ -685,7 +814,7 @@
                         </div>
                         
                         <!-- Bookings Management -->
-                        <div id="admin-bookings-management" class="admin-section" style="display: none;">
+                        <div id="admin-bookings-management" class="admin-section">
                             <h2 class="mb-4">Bookings Management</h2>
                             
                             <div class="card">
@@ -714,7 +843,7 @@
                         </div>
                         
                         <!-- Settings -->
-                        <div id="admin-settings" class="admin-section" style="display: none;">
+                        <div id="admin-settings" class="admin-section">
                             <h2 class="mb-4">Settings</h2>
                             
                             <div class="card">
@@ -759,17 +888,17 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-4">
+    <footer class="py-4">
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <h5>Hotel Nirvana</h5>
                     <p>Experience luxury and comfort like never before. Your perfect getaway awaits.</p>
-                    <div class="d-flex gap-3">
-                        <a href="#" class="text-white"><i class="fab fa-facebook fa-lg"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-twitter fa-lg"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-instagram fa-lg"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-linkedin fa-lg"></i></a>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
                     </div>
                 </div>
                 <div class="col-md-2 mb-3">
@@ -795,11 +924,11 @@
                     <p>Subscribe to our newsletter for special offers</p>
                     <div class="input-group">
                         <input type="email" class="form-control" placeholder="Your email">
-                        <button class="btn btn-primary" type="button">Subscribe</button>
+                        <button class="btn btn-gold" type="button">Subscribe</button>
                     </div>
                 </div>
             </div>
-            <hr>
+            <hr class="my-4">
             <div class="text-center">
                 <p>&copy; 2023 Hotel Nirvana. All rights reserved.</p>
             </div>
@@ -1168,11 +1297,11 @@
         function showAdminSection(sectionId) {
             // Hide all admin sections
             document.querySelectorAll('.admin-section').forEach(section => {
-                section.style.display = 'none';
+                section.classList.remove('active');
             });
             
             // Show the selected section
-            document.getElementById('admin-' + sectionId).style.display = 'block';
+            document.getElementById('admin-' + sectionId).classList.add('active');
             
             // Update active link in sidebar
             document.querySelectorAll('.sidebar a').forEach(link => {
@@ -1199,10 +1328,10 @@
             
             featuredRooms.forEach(room => {
                 const roomCard = document.createElement('div');
-                roomCard.className = 'col-md-4';
+                roomCard.className = 'col-md-4 mb-4';
                 roomCard.innerHTML = `
-                    <div class="card card-hover h-100">
-                        <div class="room-image" style="background-image: url('${room.image}')"></div>
+                    <div class="card card-3d h-100">
+                        <div class="card-image" style="background-image: url('${room.image}')"></div>
                         <div class="card-body">
                             <h5 class="card-title">${room.name}</h5>
                             <p class="card-text">${room.description}</p>
@@ -1218,26 +1347,40 @@
         }
 
         // Load all rooms on rooms page
-        function loadAllRooms() {
+        function loadAllRooms(filteredRooms = null) {
             const roomsContainer = document.getElementById('rooms-container');
             roomsContainer.innerHTML = '';
             
-            hotelData.rooms.forEach(room => {
+            const roomsToDisplay = filteredRooms || hotelData.rooms;
+            
+            if (roomsToDisplay.length === 0) {
+                roomsContainer.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <h4>No rooms found matching your criteria</h4>
+                        <p>Try adjusting your filters</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            roomsToDisplay.forEach(room => {
                 // Get room amenities
                 const roomAmenities = hotelData.amenities.filter(amenity => 
                     room.amenities.includes(amenity.id)
                 );
                 
                 const roomCard = document.createElement('div');
-                roomCard.className = 'col-md-6 col-lg-4';
+                roomCard.className = 'col-md-6 col-lg-4 mb-4';
                 roomCard.innerHTML = `
-                    <div class="card card-hover h-100">
-                        <div class="room-image" style="background-image: url('${room.image}')"></div>
+                    <div class="card card-3d h-100">
+                        <div class="card-image" style="background-image: url('${room.image}')"></div>
                         <div class="card-body">
                             <h5 class="card-title">${room.name}</h5>
                             <p class="card-text">${room.description}</p>
+                            <p><strong>Capacity:</strong> ${room.capacity} person${room.capacity > 1 ? 's' : ''}</p>
                             <ul class="amenities-list">
-                                ${roomAmenities.map(amenity => `<li>${amenity.name}</li>`).join('')}
+                                ${roomAmenities.slice(0, 3).map(amenity => `<li>${amenity.name}</li>`).join('')}
+                                ${roomAmenities.length > 3 ? `<li>+${roomAmenities.length - 3} more</li>` : ''}
                             </ul>
                             <div class="d-flex justify-content-between align-items-center mt-3">
                                 <span class="h5 text-primary">$${room.price}/night</span>
@@ -1251,30 +1394,43 @@
         }
 
         // Load all halls on halls page
-        function loadAllHalls() {
+        function loadAllHalls(filteredHalls = null) {
             const conferenceHallsContainer = document.getElementById('conference-halls');
             const partyHallsContainer = document.getElementById('party-halls');
             
             conferenceHallsContainer.innerHTML = '';
             partyHallsContainer.innerHTML = '';
             
-            hotelData.halls.forEach(hall => {
+            const hallsToDisplay = filteredHalls || hotelData.halls;
+            
+            if (hallsToDisplay.length === 0) {
+                conferenceHallsContainer.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <h4>No halls found matching your criteria</h4>
+                        <p>Try adjusting your filters</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            hallsToDisplay.forEach(hall => {
                 // Get hall amenities
                 const hallAmenities = hotelData.amenities.filter(amenity => 
                     hall.amenities.includes(amenity.id)
                 );
                 
                 const hallCard = document.createElement('div');
-                hallCard.className = 'col-md-6';
+                hallCard.className = 'col-md-6 mb-4';
                 hallCard.innerHTML = `
-                    <div class="card card-hover h-100">
-                        <div class="hall-image" style="background-image: url('${hall.image}')"></div>
+                    <div class="card card-3d h-100">
+                        <div class="card-image" style="background-image: url('${hall.image}')"></div>
                         <div class="card-body">
                             <h5 class="card-title">${hall.name}</h5>
                             <p class="card-text">${hall.description}</p>
                             <p><strong>Capacity:</strong> ${hall.capacity} people</p>
                             <ul class="amenities-list">
-                                ${hallAmenities.map(amenity => `<li>${amenity.name}</li>`).join('')}
+                                ${hallAmenities.slice(0, 3).map(amenity => `<li>${amenity.name}</li>`).join('')}
+                                ${hallAmenities.length > 3 ? `<li>+${hallAmenities.length - 3} more</li>` : ''}
                             </ul>
                             <div class="d-flex justify-content-between align-items-center mt-3">
                                 <span class="h5 text-primary">$${hall.price}/event</span>
@@ -1290,6 +1446,96 @@
                     partyHallsContainer.appendChild(hallCard);
                 }
             });
+        }
+
+        // Apply room filters
+        function applyRoomFilters() {
+            const searchTerm = document.getElementById('room-search').value.toLowerCase();
+            const typeFilter = document.getElementById('room-type-filter').value;
+            const priceFilter = document.getElementById('price-range').value;
+            const capacityFilter = document.getElementById('room-capacity-filter').value;
+            
+            const filteredRooms = hotelData.rooms.filter(room => {
+                // Search filter
+                if (searchTerm && !room.name.toLowerCase().includes(searchTerm) && 
+                    !room.description.toLowerCase().includes(searchTerm)) {
+                    return false;
+                }
+                
+                // Type filter
+                if (typeFilter !== 'all' && room.type !== typeFilter) {
+                    return false;
+                }
+                
+                // Price filter
+                if (priceFilter !== 'all') {
+                    if (priceFilter === '0-150' && room.price > 150) return false;
+                    if (priceFilter === '151-250' && (room.price < 151 || room.price > 250)) return false;
+                    if (priceFilter === '251-500' && (room.price < 251 || room.price > 500)) return false;
+                    if (priceFilter === '501+' && room.price < 501) return false;
+                }
+                
+                // Capacity filter
+                if (capacityFilter !== 'all') {
+                    if (capacityFilter === '1' && room.capacity !== 1) return false;
+                    if (capacityFilter === '2' && room.capacity !== 2) return false;
+                    if (capacityFilter === '3' && room.capacity !== 3) return false;
+                    if (capacityFilter === '4+' && room.capacity < 4) return false;
+                }
+                
+                return true;
+            });
+            
+            loadAllRooms(filteredRooms);
+        }
+
+        // Reset room filters
+        function resetRoomFilters() {
+            document.getElementById('room-search').value = '';
+            document.getElementById('room-type-filter').value = 'all';
+            document.getElementById('price-range').value = 'all';
+            document.getElementById('room-capacity-filter').value = 'all';
+            loadAllRooms();
+        }
+
+        // Apply hall filters
+        function applyHallFilters() {
+            const searchTerm = document.getElementById('hall-search').value.toLowerCase();
+            const typeFilter = document.getElementById('hall-type-filter').value;
+            const capacityFilter = document.getElementById('hall-capacity-filter').value;
+            
+            const filteredHalls = hotelData.halls.filter(hall => {
+                // Search filter
+                if (searchTerm && !hall.name.toLowerCase().includes(searchTerm) && 
+                    !hall.description.toLowerCase().includes(searchTerm)) {
+                    return false;
+                }
+                
+                // Type filter
+                if (typeFilter !== 'all' && hall.type !== typeFilter) {
+                    return false;
+                }
+                
+                // Capacity filter
+                if (capacityFilter !== 'all') {
+                    if (capacityFilter === '0-50' && hall.capacity > 50) return false;
+                    if (capacityFilter === '51-100' && (hall.capacity < 51 || hall.capacity > 100)) return false;
+                    if (capacityFilter === '101-200' && (hall.capacity < 101 || hall.capacity > 200)) return false;
+                    if (capacityFilter === '201+' && hall.capacity < 201) return false;
+                }
+                
+                return true;
+            });
+            
+            loadAllHalls(filteredHalls);
+        }
+
+        // Reset hall filters
+        function resetHallFilters() {
+            document.getElementById('hall-search').value = '';
+            document.getElementById('hall-type-filter').value = 'all';
+            document.getElementById('hall-capacity-filter').value = 'all';
+            loadAllHalls();
         }
 
         // Set booking item for the booking modal
