@@ -382,10 +382,10 @@
                         <label for="price-range" class="form-label">Price Range</label>
                         <select class="form-select" id="price-range">
                             <option value="all">All Prices</option>
-                            <option value="0-150">$0 - $150</option>
-                            <option value="151-250">$151 - $250</option>
-                            <option value="251-500">$251 - $500</option>
-                            <option value="501+">$501+</option>
+                            <option value="0-150">Rs.0 - Rs.150</option>
+                            <option value="151-250">Rs.151 - Rs.250</option>
+                            <option value="251-500">Rs.251 - Rs.500</option>
+                            <option value="501+">Rs.501+</option>
                         </select>
                     </div>
                     <div class="col-md-3 mb-3">
@@ -1061,11 +1061,11 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="room-price-12" class="form-label">Price for 12 Hours ($)</label>
+                                <label for="room-price-12" class="form-label">Price for 12 Hours (Rs.)</label>
                                 <input type="number" class="form-control" id="room-price-12" min="0" step="0.01" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="room-price-24" class="form-label">Price for 24 Hours ($)</label>
+                                <label for="room-price-24" class="form-label">Price for 24 Hours (Rs.)</label>
                                 <input type="number" class="form-control" id="room-price-24" min="0" step="0.01" required>
                             </div>
                         </div>
@@ -1127,11 +1127,11 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="edit-room-price-12" class="form-label">Price for 12 Hours ($)</label>
+                                <label for="edit-room-price-12" class="form-label">Price for 12 Hours (Rs.)</label>
                                 <input type="number" class="form-control" id="edit-room-price-12" min="0" step="0.01" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="edit-room-price-24" class="form-label">Price for 24 Hours ($)</label>
+                                <label for="edit-room-price-24" class="form-label">Price for 24 Hours (Rs.)</label>
                                 <input type="number" class="form-control" id="edit-room-price-24" min="0" step="0.01" required>
                             </div>
                         </div>
@@ -1194,7 +1194,7 @@
                                 <input type="number" class="form-control" id="hall-capacity" min="1" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="hall-price" class="form-label">Price per Event ($)</label>
+                                <label for="hall-price" class="form-label">Price per Event (Rs.)</label>
                                 <input type="number" class="form-control" id="hall-price" min="0" step="0.01" required>
                             </div>
                         </div>
@@ -1254,7 +1254,7 @@
                                 <input type="number" class="form-control" id="edit-hall-capacity" min="1" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="edit-hall-price" class="form-label">Price per Event ($)</label>
+                                <label for="edit-hall-price" class="form-label">Price per Event (Rs.)</label>
                                 <input type="number" class="form-control" id="edit-hall-price" min="0" step="0.01" required>
                             </div>
                         </div>
@@ -1635,16 +1635,16 @@
                 roomCard.className = 'col-md-4 mb-4';
                 roomCard.innerHTML = `
                     <div class="card card-3d h-100">
-                        <div class="card-image" style="background-image: url('${room.image}')"></div>
+                        <div class="card-image" style="background-image: url('Rs.{room.image}')"></div>
                         <div class="card-body">
-                            <h5 class="card-title">${room.name}</h5>
-                            <p class="card-text">${room.description}</p>
+                            <h5 class="card-title">Rs.{room.name}</h5>
+                            <p class="card-text">Rs.{room.description}</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <span class="h5 text-primary">$${room.price24}/24hrs</span>
-                                    <span class="text-muted d-block">$${room.price12}/12hrs</span>
+                                    <span class="h5 text-primary">Rs.Rs.{room.price24}/24hrs</span>
+                                    <span class="text-muted d-block">Rs.Rs.{room.price12}/12hrs</span>
                                 </div>
-                                <button class="btn btn-primary" onclick="openBookingModal('room', ${room.id})">Book Now</button>
+                                <button class="btn btn-primary" onclick="openBookingModal('room', Rs.{room.id})">Book Now</button>
                             </div>
                         </div>
                     </div>
@@ -1680,21 +1680,21 @@
                 roomCard.className = 'col-md-6 col-lg-4 mb-4';
                 roomCard.innerHTML = `
                     <div class="card card-3d h-100">
-                        <div class="card-image" style="background-image: url('${room.image}')"></div>
+                        <div class="card-image" style="background-image: url('Rs.{room.image}')"></div>
                         <div class="card-body">
-                            <h5 class="card-title">${room.name}</h5>
-                            <p class="card-text">${room.description}</p>
-                            <p><strong>Capacity:</strong> ${room.capacity} person${room.capacity > 1 ? 's' : ''}</p>
+                            <h5 class="card-title">Rs.{room.name}</h5>
+                            <p class="card-text">Rs.{room.description}</p>
+                            <p><strong>Capacity:</strong> Rs.{room.capacity} personRs.{room.capacity > 1 ? 's' : ''}</p>
                             <ul class="amenities-list">
-                                ${roomAmenities.slice(0, 3).map(amenity => `<li>${amenity.name}</li>`).join('')}
-                                ${roomAmenities.length > 3 ? `<li>+${roomAmenities.length - 3} more</li>` : ''}
+                                Rs.{roomAmenities.slice(0, 3).map(amenity => `<li>Rs.{amenity.name}</li>`).join('')}
+                                Rs.{roomAmenities.length > 3 ? `<li>+Rs.{roomAmenities.length - 3} more</li>` : ''}
                             </ul>
                             <div class="d-flex justify-content-between align-items-center mt-3">
                                 <div>
-                                    <span class="h5 text-primary">$${room.price24}/24hrs</span>
-                                    <span class="text-muted d-block">$${room.price12}/12hrs</span>
+                                    <span class="h5 text-primary">Rs.Rs.{room.price24}/24hrs</span>
+                                    <span class="text-muted d-block">Rs.Rs.{room.price12}/12hrs</span>
                                 </div>
-                                <button class="btn btn-primary" onclick="openBookingModal('room', ${room.id})">Book Now</button>
+                                <button class="btn btn-primary" onclick="openBookingModal('room', Rs.{room.id})">Book Now</button>
                             </div>
                         </div>
                     </div>
@@ -1733,18 +1733,18 @@
                 hallCard.className = 'col-md-6 mb-4';
                 hallCard.innerHTML = `
                     <div class="card card-3d h-100">
-                        <div class="card-image" style="background-image: url('${hall.image}')"></div>
+                        <div class="card-image" style="background-image: url('Rs.{hall.image}')"></div>
                         <div class="card-body">
-                            <h5 class="card-title">${hall.name}</h5>
-                            <p class="card-text">${hall.description}</p>
-                            <p><strong>Capacity:</strong> ${hall.capacity} people</p>
+                            <h5 class="card-title">Rs.{hall.name}</h5>
+                            <p class="card-text">Rs.{hall.description}</p>
+                            <p><strong>Capacity:</strong> Rs.{hall.capacity} people</p>
                             <ul class="amenities-list">
-                                ${hallAmenities.slice(0, 3).map(amenity => `<li>${amenity.name}</li>`).join('')}
-                                ${hallAmenities.length > 3 ? `<li>+${hallAmenities.length - 3} more</li>` : ''}
+                                Rs.{hallAmenities.slice(0, 3).map(amenity => `<li>Rs.{amenity.name}</li>`).join('')}
+                                Rs.{hallAmenities.length > 3 ? `<li>+Rs.{hallAmenities.length - 3} more</li>` : ''}
                             </ul>
                             <div class="d-flex justify-content-between align-items-center mt-3">
-                                <span class="h5 text-primary">$${hall.price}/event</span>
-                                <button class="btn btn-primary" onclick="openBookingModal('hall', ${hall.id})">Book Now</button>
+                                <span class="h5 text-primary">Rs.Rs.{hall.price}/event</span>
+                                <button class="btn btn-primary" onclick="openBookingModal('hall', Rs.{hall.id})">Book Now</button>
                             </div>
                         </div>
                     </div>
@@ -1764,12 +1764,12 @@
             
             if (type === 'room') {
                 item = hotelData.rooms.find(r => r.id === id);
-                title = `Book Room: ${item.name}`;
+                title = `Book Room: Rs.{item.name}`;
                 price = item.price24;
                 durationText = '24 Hours';
             } else {
                 item = hotelData.halls.find(h => h.id === id);
-                title = `Book Hall: ${item.name}`;
+                title = `Book Hall: Rs.{item.name}`;
                 price = item.price;
                 durationText = 'Event';
             }
@@ -1778,7 +1778,7 @@
             document.getElementById('bookingItemImage').src = item.image;
             document.getElementById('bookingItemName').textContent = item.name;
             document.getElementById('bookingItemDescription').textContent = item.description;
-            document.getElementById('bookingItemPrice').textContent = `$${price}`;
+            document.getElementById('bookingItemPrice').textContent = `Rs.Rs.{price}`;
             document.getElementById('bookingItemDuration').textContent = durationText;
             document.getElementById('booking-type').value = type;
             document.getElementById('booking-item-id').value = id;
@@ -1819,17 +1819,17 @@
             const summary = document.getElementById('booking-summary');
             if (type === 'room') {
                 summary.innerHTML = `
-                    <strong>${item.name}</strong><br>
-                    Duration: ${duration} Hours<br>
-                    Check-in: ${checkIn || 'Not selected'}<br>
-                    Check-out: ${checkOut || 'Not selected'}<br>
-                    <strong>Total: $${total}</strong>
+                    <strong>Rs.{item.name}</strong><br>
+                    Duration: Rs.{duration} Hours<br>
+                    Check-in: Rs.{checkIn || 'Not selected'}<br>
+                    Check-out: Rs.{checkOut || 'Not selected'}<br>
+                    <strong>Total: Rs.Rs.{total}</strong>
                 `;
             } else {
                 summary.innerHTML = `
-                    <strong>${item.name}</strong><br>
-                    Event Date: ${checkIn || 'Not selected'}<br>
-                    <strong>Total: $${total}</strong>
+                    <strong>Rs.{item.name}</strong><br>
+                    Event Date: Rs.{checkIn || 'Not selected'}<br>
+                    <strong>Total: Rs.Rs.{total}</strong>
                 `;
             }
         }
@@ -2012,10 +2012,10 @@
                 const bookingRow = document.createElement('tr');
                 
                 bookingRow.innerHTML = `
-                    <td>#${booking.id}</td>
-                    <td>${booking.type}</td>
-                    <td>${booking.customer}</td>
-                    <td>${booking.checkIn}</td>
+                    <td>#Rs.{booking.id}</td>
+                    <td>Rs.{booking.type}</td>
+                    <td>Rs.{booking.customer}</td>
+                    <td>Rs.{booking.checkIn}</td>
                 `;
                 recentBookingsContainer.appendChild(bookingRow);
             });
@@ -2029,17 +2029,17 @@
             hotelData.rooms.forEach(room => {
                 const roomRow = document.createElement('tr');
                 roomRow.innerHTML = `
-                    <td>${room.id}</td>
-                    <td><img src="${room.image}" alt="${room.name}" style="width: 60px; height: 40px; object-fit: cover;"></td>
-                    <td>${room.name}</td>
-                    <td>${room.type}</td>
-                    <td>$${room.price24}/24hrs<br>$${room.price12}/12hrs</td>
-                    <td><span class="badge bg-success">${room.status}</span></td>
+                    <td>Rs.{room.id}</td>
+                    <td><img src="Rs.{room.image}" alt="Rs.{room.name}" style="width: 60px; height: 40px; object-fit: cover;"></td>
+                    <td>Rs.{room.name}</td>
+                    <td>Rs.{room.type}</td>
+                    <td>Rs.Rs.{room.price24}/24hrs<br>Rs.Rs.{room.price12}/12hrs</td>
+                    <td><span class="badge bg-success">Rs.{room.status}</span></td>
                     <td>
-                        <button class="btn btn-sm btn-warning me-1" onclick="openEditRoomModal(${room.id})">
+                        <button class="btn btn-sm btn-warning me-1" onclick="openEditRoomModal(Rs.{room.id})">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteRoom(${room.id})">
+                        <button class="btn btn-sm btn-danger" onclick="deleteRoom(Rs.{room.id})">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -2056,18 +2056,18 @@
             hotelData.halls.forEach(hall => {
                 const hallRow = document.createElement('tr');
                 hallRow.innerHTML = `
-                    <td>${hall.id}</td>
-                    <td><img src="${hall.image}" alt="${hall.name}" style="width: 60px; height: 40px; object-fit: cover;"></td>
-                    <td>${hall.name}</td>
-                    <td>${hall.type}</td>
-                    <td>${hall.capacity}</td>
-                    <td>$${hall.price}</td>
-                    <td><span class="badge bg-success">${hall.status}</span></td>
+                    <td>Rs.{hall.id}</td>
+                    <td><img src="Rs.{hall.image}" alt="Rs.{hall.name}" style="width: 60px; height: 40px; object-fit: cover;"></td>
+                    <td>Rs.{hall.name}</td>
+                    <td>Rs.{hall.type}</td>
+                    <td>Rs.{hall.capacity}</td>
+                    <td>Rs.Rs.{hall.price}</td>
+                    <td><span class="badge bg-success">Rs.{hall.status}</span></td>
                     <td>
-                        <button class="btn btn-sm btn-warning me-1" onclick="openEditHallModal(${hall.id})">
+                        <button class="btn btn-sm btn-warning me-1" onclick="openEditHallModal(Rs.{hall.id})">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteHall(${hall.id})">
+                        <button class="btn btn-sm btn-danger" onclick="deleteHall(Rs.{hall.id})">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -2084,15 +2084,15 @@
             hotelData.amenities.forEach(amenity => {
                 const amenityRow = document.createElement('tr');
                 amenityRow.innerHTML = `
-                    <td>${amenity.id}</td>
-                    <td>${amenity.name}</td>
-                    <td>${amenity.type}</td>
-                    <td>${amenity.description}</td>
+                    <td>Rs.{amenity.id}</td>
+                    <td>Rs.{amenity.name}</td>
+                    <td>Rs.{amenity.type}</td>
+                    <td>Rs.{amenity.description}</td>
                     <td>
-                        <button class="btn btn-sm btn-warning me-1" onclick="openEditAmenityModal(${amenity.id})">
+                        <button class="btn btn-sm btn-warning me-1" onclick="openEditAmenityModal(Rs.{amenity.id})">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteAmenity(${amenity.id})">
+                        <button class="btn btn-sm btn-danger" onclick="deleteAmenity(Rs.{amenity.id})">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -2109,22 +2109,22 @@
             hotelData.bookings.forEach(booking => {
                 const bookingRow = document.createElement('tr');
                 bookingRow.innerHTML = `
-                    <td>#${booking.id}</td>
-                    <td>${booking.customer}</td>
-                    <td>${booking.type}</td>
-                    <td>${booking.itemName}</td>
-                    <td>${booking.checkIn}</td>
-                    <td>${booking.checkOut}</td>
-                    <td>${booking.duration}</td>
-                    <td><span class="badge bg-${booking.status === 'confirmed' ? 'success' : 'warning'}">${booking.status}</span></td>
+                    <td>#Rs.{booking.id}</td>
+                    <td>Rs.{booking.customer}</td>
+                    <td>Rs.{booking.type}</td>
+                    <td>Rs.{booking.itemName}</td>
+                    <td>Rs.{booking.checkIn}</td>
+                    <td>Rs.{booking.checkOut}</td>
+                    <td>Rs.{booking.duration}</td>
+                    <td><span class="badge bg-Rs.{booking.status === 'confirmed' ? 'success' : 'warning'}">Rs.{booking.status}</span></td>
                     <td>
-                        <button class="btn btn-sm btn-info me-1" onclick="viewBooking(${booking.id})">
+                        <button class="btn btn-sm btn-info me-1" onclick="viewBooking(Rs.{booking.id})">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn btn-sm btn-warning me-1" onclick="editBooking(${booking.id})">
+                        <button class="btn btn-sm btn-warning me-1" onclick="editBooking(Rs.{booking.id})">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteBooking(${booking.id})">
+                        <button class="btn btn-sm btn-danger" onclick="deleteBooking(Rs.{booking.id})">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -2151,9 +2151,9 @@
                 col.className = 'col-md-6';
                 col.innerHTML = `
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="${amenity.id}" id="room-amenity-${amenity.id}">
-                        <label class="form-check-label" for="room-amenity-${amenity.id}">
-                            ${amenity.name}
+                        <input class="form-check-input" type="checkbox" value="Rs.{amenity.id}" id="room-amenity-Rs.{amenity.id}">
+                        <label class="form-check-label" for="room-amenity-Rs.{amenity.id}">
+                            Rs.{amenity.name}
                         </label>
                     </div>
                 `;
@@ -2166,9 +2166,9 @@
                 col.className = 'col-md-6';
                 col.innerHTML = `
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="${amenity.id}" id="hall-amenity-${amenity.id}">
-                        <label class="form-check-label" for="hall-amenity-${amenity.id}">
-                            ${amenity.name}
+                        <input class="form-check-input" type="checkbox" value="Rs.{amenity.id}" id="hall-amenity-Rs.{amenity.id}">
+                        <label class="form-check-label" for="hall-amenity-Rs.{amenity.id}">
+                            Rs.{amenity.name}
                         </label>
                     </div>
                 `;
@@ -2192,9 +2192,9 @@
                 col.className = 'col-md-6';
                 col.innerHTML = `
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="${amenity.id}" id="edit-room-amenity-${amenity.id}" ${isChecked ? 'checked' : ''}>
-                        <label class="form-check-label" for="edit-room-amenity-${amenity.id}">
-                            ${amenity.name}
+                        <input class="form-check-input" type="checkbox" value="Rs.{amenity.id}" id="edit-room-amenity-Rs.{amenity.id}" Rs.{isChecked ? 'checked' : ''}>
+                        <label class="form-check-label" for="edit-room-amenity-Rs.{amenity.id}">
+                            Rs.{amenity.name}
                         </label>
                     </div>
                 `;
@@ -2218,9 +2218,9 @@
                 col.className = 'col-md-6';
                 col.innerHTML = `
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="${amenity.id}" id="edit-hall-amenity-${amenity.id}" ${isChecked ? 'checked' : ''}>
-                        <label class="form-check-label" for="edit-hall-amenity-${amenity.id}">
-                            ${amenity.name}
+                        <input class="form-check-input" type="checkbox" value="Rs.{amenity.id}" id="edit-hall-amenity-Rs.{amenity.id}" Rs.{isChecked ? 'checked' : ''}>
+                        <label class="form-check-label" for="edit-hall-amenity-Rs.{amenity.id}">
+                            Rs.{amenity.name}
                         </label>
                     </div>
                 `;
@@ -2545,22 +2545,22 @@
             if (!booking) return;
             
             alert(`Booking Details:\n
-ID: #${booking.id}
-Customer: ${booking.customer}
-Email: ${booking.email}
-Phone: ${booking.phone}
-Type: ${booking.type}
-Item: ${booking.itemName}
-Check-in: ${booking.checkIn}
-Check-out: ${booking.checkOut}
-Duration: ${booking.duration}
-Special Requests: ${booking.specialRequests || 'None'}
-Status: ${booking.status}
-Booking Date: ${booking.bookingDate}`);
+ID: #Rs.{booking.id}
+Customer: Rs.{booking.customer}
+Email: Rs.{booking.email}
+Phone: Rs.{booking.phone}
+Type: Rs.{booking.type}
+Item: Rs.{booking.itemName}
+Check-in: Rs.{booking.checkIn}
+Check-out: Rs.{booking.checkOut}
+Duration: Rs.{booking.duration}
+Special Requests: Rs.{booking.specialRequests || 'None'}
+Status: Rs.{booking.status}
+Booking Date: Rs.{booking.bookingDate}`);
         }
 
         function editBooking(id) {
-            alert(`Edit booking with ID: ${id} - This would open an edit form in a real application`);
+            alert(`Edit booking with ID: Rs.{id} - This would open an edit form in a real application`);
         }
 
         function deleteBooking(id) {
