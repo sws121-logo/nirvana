@@ -246,6 +246,22 @@
         .edit-form.active {
             display: block;
         }
+        
+        .booking-modal-img {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+            border-radius: 8px;
+        }
+        
+        .duration-badge {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -837,6 +853,7 @@
                                                     <th>Item</th>
                                                     <th>Check-in</th>
                                                     <th>Check-out</th>
+                                                    <th>Duration</th>
                                                     <th>Status</th>
                                                     <th>Actions</th>
                                                 </tr>
@@ -943,6 +960,79 @@
         </div>
     </footer>
 
+    <!-- Booking Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bookingModalTitle">Book Now</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img id="bookingItemImage" src="" alt="Booking Item" class="booking-modal-img mb-3">
+                            <h4 id="bookingItemName"></h4>
+                            <p id="bookingItemDescription"></p>
+                            <div class="d-flex justify-content-between">
+                                <span id="bookingItemPrice" class="h5 text-primary"></span>
+                                <span id="bookingItemDuration" class="duration-badge"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <form id="booking-form">
+                                <input type="hidden" id="booking-type">
+                                <input type="hidden" id="booking-item-id">
+                                <div class="mb-3">
+                                    <label for="customer-name" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="customer-name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="customer-email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="customer-email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="customer-phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="customer-phone" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="check-in-date" class="form-label">Check-in Date</label>
+                                        <input type="date" class="form-control" id="check-in-date" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="check-out-date" class="form-label">Check-out Date</label>
+                                        <input type="date" class="form-control" id="check-out-date" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="booking-duration" class="form-label">Duration</label>
+                                    <select class="form-select" id="booking-duration">
+                                        <option value="12">12 Hours</option>
+                                        <option value="24" selected>24 Hours</option>
+                                        <option value="48">48 Hours</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="special-requests" class="form-label">Special Requests</label>
+                                    <textarea class="form-control" id="special-requests" rows="3"></textarea>
+                                </div>
+                                <div class="alert alert-info">
+                                    <h6>Booking Summary</h6>
+                                    <p id="booking-summary"></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="confirmBooking()">Confirm Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Add Room Modal -->
     <div class="modal fade" id="addRoomModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -971,13 +1061,17 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="room-price" class="form-label">Price per Night ($)</label>
-                                <input type="number" class="form-control" id="room-price" min="0" step="0.01" required>
+                                <label for="room-price-12" class="form-label">Price for 12 Hours ($)</label>
+                                <input type="number" class="form-control" id="room-price-12" min="0" step="0.01" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="room-capacity" class="form-label">Capacity</label>
-                                <input type="number" class="form-control" id="room-capacity" min="1" required>
+                                <label for="room-price-24" class="form-label">Price for 24 Hours ($)</label>
+                                <input type="number" class="form-control" id="room-price-24" min="0" step="0.01" required>
                             </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="room-capacity" class="form-label">Capacity</label>
+                            <input type="number" class="form-control" id="room-capacity" min="1" required>
                         </div>
                         <div class="mb-3">
                             <label for="room-description" class="form-label">Description</label>
@@ -1033,13 +1127,17 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="edit-room-price" class="form-label">Price per Night ($)</label>
-                                <input type="number" class="form-control" id="edit-room-price" min="0" step="0.01" required>
+                                <label for="edit-room-price-12" class="form-label">Price for 12 Hours ($)</label>
+                                <input type="number" class="form-control" id="edit-room-price-12" min="0" step="0.01" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="edit-room-capacity" class="form-label">Capacity</label>
-                                <input type="number" class="form-control" id="edit-room-capacity" min="1" required>
+                                <label for="edit-room-price-24" class="form-label">Price for 24 Hours ($)</label>
+                                <input type="number" class="form-control" id="edit-room-price-24" min="0" step="0.01" required>
                             </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-room-capacity" class="form-label">Capacity</label>
+                            <input type="number" class="form-control" id="edit-room-capacity" min="1" required>
                         </div>
                         <div class="mb-3">
                             <label for="edit-room-description" class="form-label">Description</label>
@@ -1272,7 +1370,8 @@
                     id: 1,
                     name: "Deluxe King Room",
                     type: "deluxe",
-                    price: 199,
+                    price12: 99,
+                    price24: 179,
                     capacity: 2,
                     description: "Spacious room with a king-sized bed, luxurious amenities, and a beautiful city view.",
                     amenities: [1, 2, 3, 4, 5],
@@ -1283,7 +1382,8 @@
                     id: 2,
                     name: "Executive Suite",
                     type: "suite",
-                    price: 299,
+                    price12: 149,
+                    price24: 269,
                     capacity: 3,
                     description: "Luxurious suite with separate living area, premium amenities, and panoramic views.",
                     amenities: [1, 2, 3, 4, 5, 6, 7],
@@ -1294,7 +1394,8 @@
                     id: 3,
                     name: "Standard Double Room",
                     type: "double",
-                    price: 149,
+                    price12: 79,
+                    price24: 139,
                     capacity: 2,
                     description: "Comfortable room with two double beds, perfect for couples or small families.",
                     amenities: [1, 2, 3, 4],
@@ -1305,7 +1406,8 @@
                     id: 4,
                     name: "Single Business Room",
                     type: "single",
-                    price: 129,
+                    price12: 69,
+                    price24: 119,
                     capacity: 1,
                     description: "Compact room designed for business travelers with a comfortable workspace.",
                     amenities: [1, 2, 3, 8],
@@ -1385,29 +1487,47 @@
                 {
                     id: 1,
                     customer: "John Doe",
+                    email: "john@example.com",
+                    phone: "+1 (555) 123-4567",
                     type: "room",
                     itemId: 1,
+                    itemName: "Deluxe King Room",
                     checkIn: "2023-06-15",
-                    checkOut: "2023-06-18",
-                    status: "confirmed"
+                    checkOut: "2023-06-16",
+                    duration: "24",
+                    specialRequests: "Early check-in requested",
+                    status: "confirmed",
+                    bookingDate: "2023-05-20"
                 },
                 {
                     id: 2,
                     customer: "ABC Corporation",
+                    email: "events@abccorp.com",
+                    phone: "+1 (555) 987-6543",
                     type: "hall",
                     itemId: 2,
+                    itemName: "Executive Conference Hall",
                     checkIn: "2023-06-20",
                     checkOut: "2023-06-20",
-                    status: "confirmed"
+                    duration: "12",
+                    specialRequests: "Need video conferencing setup",
+                    status: "confirmed",
+                    bookingDate: "2023-05-15"
                 },
                 {
                     id: 3,
                     customer: "Jane Smith",
+                    email: "jane.smith@email.com",
+                    phone: "+1 (555) 456-7890",
                     type: "room",
                     itemId: 3,
+                    itemName: "Standard Double Room",
                     checkIn: "2023-06-22",
-                    checkOut: "2023-06-25",
-                    status: "pending"
+                    checkOut: "2023-06-24",
+                    duration: "48",
+                    specialRequests: "",
+                    status: "pending",
+                    bookingDate: "2023-05-25"
                 }
             ]
         };
@@ -1440,7 +1560,23 @@
             
             // Load amenities checkboxes for room and hall forms
             loadAmenitiesCheckboxes();
+            
+            // Set minimum dates for booking
+            setMinBookingDates();
         });
+
+        // Set minimum dates for booking forms
+        function setMinBookingDates() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const todayFormatted = today.toISOString().split('T')[0];
+            const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+            
+            document.getElementById('check-in-date').min = todayFormatted;
+            document.getElementById('check-out-date').min = tomorrowFormatted;
+        }
 
         // Function to show different pages
         function showPage(pageId) {
@@ -1504,8 +1640,11 @@
                             <h5 class="card-title">${room.name}</h5>
                             <p class="card-text">${room.description}</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="h5 text-primary">$${room.price}/night</span>
-                                <button class="btn btn-primary" onclick="showPage('rooms')">Book Now</button>
+                                <div>
+                                    <span class="h5 text-primary">$${room.price24}/24hrs</span>
+                                    <span class="text-muted d-block">$${room.price12}/12hrs</span>
+                                </div>
+                                <button class="btn btn-primary" onclick="openBookingModal('room', ${room.id})">Book Now</button>
                             </div>
                         </div>
                     </div>
@@ -1551,8 +1690,11 @@
                                 ${roomAmenities.length > 3 ? `<li>+${roomAmenities.length - 3} more</li>` : ''}
                             </ul>
                             <div class="d-flex justify-content-between align-items-center mt-3">
-                                <span class="h5 text-primary">$${room.price}/night</span>
-                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="setBookingItem('room', ${room.id})">Book Now</button>
+                                <div>
+                                    <span class="h5 text-primary">$${room.price24}/24hrs</span>
+                                    <span class="text-muted d-block">$${room.price12}/12hrs</span>
+                                </div>
+                                <button class="btn btn-primary" onclick="openBookingModal('room', ${room.id})">Book Now</button>
                             </div>
                         </div>
                     </div>
@@ -1602,7 +1744,7 @@
                             </ul>
                             <div class="d-flex justify-content-between align-items-center mt-3">
                                 <span class="h5 text-primary">$${hall.price}/event</span>
-                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookingModal" onclick="setBookingItem('hall', ${hall.id})">Book Now</button>
+                                <button class="btn btn-primary" onclick="openBookingModal('hall', ${hall.id})">Book Now</button>
                             </div>
                         </div>
                     </div>
@@ -1614,6 +1756,152 @@
                     partyHallsContainer.appendChild(hallCard);
                 }
             });
+        }
+
+        // Open booking modal
+        function openBookingModal(type, id) {
+            let item, title, price, durationText;
+            
+            if (type === 'room') {
+                item = hotelData.rooms.find(r => r.id === id);
+                title = `Book Room: ${item.name}`;
+                price = item.price24;
+                durationText = '24 Hours';
+            } else {
+                item = hotelData.halls.find(h => h.id === id);
+                title = `Book Hall: ${item.name}`;
+                price = item.price;
+                durationText = 'Event';
+            }
+            
+            document.getElementById('bookingModalTitle').textContent = title;
+            document.getElementById('bookingItemImage').src = item.image;
+            document.getElementById('bookingItemName').textContent = item.name;
+            document.getElementById('bookingItemDescription').textContent = item.description;
+            document.getElementById('bookingItemPrice').textContent = `$${price}`;
+            document.getElementById('bookingItemDuration').textContent = durationText;
+            document.getElementById('booking-type').value = type;
+            document.getElementById('booking-item-id').value = id;
+            
+            // Update booking summary
+            updateBookingSummary();
+            
+            const modal = new bootstrap.Modal(document.getElementById('bookingModal'));
+            modal.show();
+        }
+
+        // Update booking summary
+        function updateBookingSummary() {
+            const type = document.getElementById('booking-type').value;
+            const itemId = parseInt(document.getElementById('booking-item-id').value);
+            const duration = document.getElementById('booking-duration').value;
+            const checkIn = document.getElementById('check-in-date').value;
+            const checkOut = document.getElementById('check-out-date').value;
+            
+            let item, price, total;
+            
+            if (type === 'room') {
+                item = hotelData.rooms.find(r => r.id === itemId);
+                if (duration === '12') {
+                    price = item.price12;
+                } else if (duration === '24') {
+                    price = item.price24;
+                } else {
+                    price = item.price24 * 2; // 48 hours
+                }
+                total = price;
+            } else {
+                item = hotelData.halls.find(h => h.id === itemId);
+                price = item.price;
+                total = price;
+            }
+            
+            const summary = document.getElementById('booking-summary');
+            if (type === 'room') {
+                summary.innerHTML = `
+                    <strong>${item.name}</strong><br>
+                    Duration: ${duration} Hours<br>
+                    Check-in: ${checkIn || 'Not selected'}<br>
+                    Check-out: ${checkOut || 'Not selected'}<br>
+                    <strong>Total: $${total}</strong>
+                `;
+            } else {
+                summary.innerHTML = `
+                    <strong>${item.name}</strong><br>
+                    Event Date: ${checkIn || 'Not selected'}<br>
+                    <strong>Total: $${total}</strong>
+                `;
+            }
+        }
+
+        // Confirm booking
+        function confirmBooking() {
+            const type = document.getElementById('booking-type').value;
+            const itemId = parseInt(document.getElementById('booking-item-id').value);
+            const customerName = document.getElementById('customer-name').value;
+            const customerEmail = document.getElementById('customer-email').value;
+            const customerPhone = document.getElementById('customer-phone').value;
+            const checkIn = document.getElementById('check-in-date').value;
+            const checkOut = document.getElementById('check-out-date').value;
+            const duration = document.getElementById('booking-duration').value;
+            const specialRequests = document.getElementById('special-requests').value;
+            
+            if (!customerName || !customerEmail || !customerPhone || !checkIn) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            let item, itemName;
+            
+            if (type === 'room') {
+                item = hotelData.rooms.find(r => r.id === itemId);
+                itemName = item.name;
+                
+                if (!checkOut) {
+                    alert('Please select check-out date');
+                    return;
+                }
+            } else {
+                item = hotelData.halls.find(h => h.id === itemId);
+                itemName = item.name;
+                // For halls, check-out is same as check-in
+                document.getElementById('check-out-date').value = checkIn;
+            }
+            
+            // Create new booking
+            const newBooking = {
+                id: hotelData.bookings.length > 0 ? Math.max(...hotelData.bookings.map(b => b.id)) + 1 : 1,
+                customer: customerName,
+                email: customerEmail,
+                phone: customerPhone,
+                type: type,
+                itemId: itemId,
+                itemName: itemName,
+                checkIn: checkIn,
+                checkOut: type === 'room' ? checkOut : checkIn,
+                duration: type === 'room' ? duration : 'Event',
+                specialRequests: specialRequests,
+                status: 'confirmed',
+                bookingDate: new Date().toISOString().split('T')[0]
+            };
+            
+            // Add to bookings
+            hotelData.bookings.push(newBooking);
+            
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('bookingModal'));
+            modal.hide();
+            
+            // Reset form
+            document.getElementById('booking-form').reset();
+            setMinBookingDates();
+            
+            // Update admin dashboard
+            loadAdminDashboard();
+            loadAdminBookings();
+            
+            // Show success message
+            alert('Booking confirmed successfully! Your booking has been added to the system.');
         }
 
         // Apply room filters
@@ -1635,12 +1923,12 @@
                     return false;
                 }
                 
-                // Price filter
+                // Price filter (using 24hr price)
                 if (priceFilter !== 'all') {
-                    if (priceFilter === '0-150' && room.price > 150) return false;
-                    if (priceFilter === '151-250' && (room.price < 151 || room.price > 250)) return false;
-                    if (priceFilter === '251-500' && (room.price < 251 || room.price > 500)) return false;
-                    if (priceFilter === '501+' && room.price < 501) return false;
+                    if (priceFilter === '0-150' && room.price24 > 150) return false;
+                    if (priceFilter === '151-250' && (room.price24 < 151 || room.price24 > 250)) return false;
+                    if (priceFilter === '251-500' && (room.price24 < 251 || room.price24 > 500)) return false;
+                    if (priceFilter === '501+' && room.price24 < 501) return false;
                 }
                 
                 // Capacity filter
@@ -1706,13 +1994,6 @@
             loadAllHalls();
         }
 
-        // Set booking item for the booking modal
-        function setBookingItem(type, id) {
-            // This would typically set up the booking form with the selected item
-            console.log(`Booking ${type} with ID: ${id}`);
-            // In a real application, you would populate the booking form with the selected item details
-        }
-
         // Load admin dashboard data
         function loadAdminDashboard() {
             document.getElementById('total-rooms').textContent = hotelData.rooms.length;
@@ -1729,16 +2010,6 @@
             
             recentBookings.forEach(booking => {
                 const bookingRow = document.createElement('tr');
-                
-                // Get item name based on type and ID
-                let itemName = '';
-                if (booking.type === 'room') {
-                    const room = hotelData.rooms.find(r => r.id === booking.itemId);
-                    itemName = room ? room.name : 'Unknown Room';
-                } else {
-                    const hall = hotelData.halls.find(h => h.id === booking.itemId);
-                    itemName = hall ? hall.name : 'Unknown Hall';
-                }
                 
                 bookingRow.innerHTML = `
                     <td>#${booking.id}</td>
@@ -1762,7 +2033,7 @@
                     <td><img src="${room.image}" alt="${room.name}" style="width: 60px; height: 40px; object-fit: cover;"></td>
                     <td>${room.name}</td>
                     <td>${room.type}</td>
-                    <td>$${room.price}</td>
+                    <td>$${room.price24}/24hrs<br>$${room.price12}/12hrs</td>
                     <td><span class="badge bg-success">${room.status}</span></td>
                     <td>
                         <button class="btn btn-sm btn-warning me-1" onclick="openEditRoomModal(${room.id})">
@@ -1836,24 +2107,15 @@
             bookingsTable.innerHTML = '';
             
             hotelData.bookings.forEach(booking => {
-                // Get item name based on type and ID
-                let itemName = '';
-                if (booking.type === 'room') {
-                    const room = hotelData.rooms.find(r => r.id === booking.itemId);
-                    itemName = room ? room.name : 'Unknown Room';
-                } else {
-                    const hall = hotelData.halls.find(h => h.id === booking.itemId);
-                    itemName = hall ? hall.name : 'Unknown Hall';
-                }
-                
                 const bookingRow = document.createElement('tr');
                 bookingRow.innerHTML = `
                     <td>#${booking.id}</td>
                     <td>${booking.customer}</td>
                     <td>${booking.type}</td>
-                    <td>${itemName}</td>
+                    <td>${booking.itemName}</td>
                     <td>${booking.checkIn}</td>
                     <td>${booking.checkOut}</td>
+                    <td>${booking.duration}</td>
                     <td><span class="badge bg-${booking.status === 'confirmed' ? 'success' : 'warning'}">${booking.status}</span></td>
                     <td>
                         <button class="btn btn-sm btn-info me-1" onclick="viewBooking(${booking.id})">
@@ -1974,7 +2236,8 @@
             document.getElementById('edit-room-id').value = room.id;
             document.getElementById('edit-room-name').value = room.name;
             document.getElementById('edit-room-type').value = room.type;
-            document.getElementById('edit-room-price').value = room.price;
+            document.getElementById('edit-room-price-12').value = room.price12;
+            document.getElementById('edit-room-price-24').value = room.price24;
             document.getElementById('edit-room-capacity').value = room.capacity;
             document.getElementById('edit-room-description').value = room.description;
             document.getElementById('edit-room-image').value = room.image;
@@ -2002,7 +2265,8 @@
                 ...hotelData.rooms[roomIndex],
                 name: document.getElementById('edit-room-name').value,
                 type: document.getElementById('edit-room-type').value,
-                price: parseFloat(document.getElementById('edit-room-price').value),
+                price12: parseFloat(document.getElementById('edit-room-price-12').value),
+                price24: parseFloat(document.getElementById('edit-room-price-24').value),
                 capacity: parseInt(document.getElementById('edit-room-capacity').value),
                 description: document.getElementById('edit-room-description').value,
                 amenities: selectedAmenities,
@@ -2118,7 +2382,8 @@
         function addNewRoom() {
             const name = document.getElementById('room-name').value;
             const type = document.getElementById('room-type').value;
-            const price = parseFloat(document.getElementById('room-price').value);
+            const price12 = parseFloat(document.getElementById('room-price-12').value);
+            const price24 = parseFloat(document.getElementById('room-price-24').value);
             const capacity = parseInt(document.getElementById('room-capacity').value);
             const description = document.getElementById('room-description').value;
             
@@ -2133,7 +2398,8 @@
                 id: hotelData.rooms.length > 0 ? Math.max(...hotelData.rooms.map(r => r.id)) + 1 : 1,
                 name,
                 type,
-                price,
+                price12,
+                price24,
                 capacity,
                 description,
                 amenities: selectedAmenities,
@@ -2275,7 +2541,22 @@
         }
 
         function viewBooking(id) {
-            alert(`View booking with ID: ${id} - This would show booking details in a real application`);
+            const booking = hotelData.bookings.find(b => b.id === id);
+            if (!booking) return;
+            
+            alert(`Booking Details:\n
+ID: #${booking.id}
+Customer: ${booking.customer}
+Email: ${booking.email}
+Phone: ${booking.phone}
+Type: ${booking.type}
+Item: ${booking.itemName}
+Check-in: ${booking.checkIn}
+Check-out: ${booking.checkOut}
+Duration: ${booking.duration}
+Special Requests: ${booking.specialRequests || 'None'}
+Status: ${booking.status}
+Booking Date: ${booking.bookingDate}`);
         }
 
         function editBooking(id) {
@@ -2303,6 +2584,11 @@
             e.preventDefault();
             alert('Settings saved successfully!');
         });
+
+        // Add event listeners for booking form updates
+        document.getElementById('booking-duration').addEventListener('change', updateBookingSummary);
+        document.getElementById('check-in-date').addEventListener('change', updateBookingSummary);
+        document.getElementById('check-out-date').addEventListener('change', updateBookingSummary);
     </script>
 </body>
 </html>
