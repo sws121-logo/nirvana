@@ -1794,7 +1794,7 @@
             document.getElementById('bookingItemImage').src = item.image;
             document.getElementById('bookingItemName').textContent = item.name;
             document.getElementById('bookingItemDescription').textContent = item.description;
-            document.getElementById('bookingItemPrice').textContent = `$${price}`;
+            document.getElementById('bookingItemPrice').textContent = `Rs.${price}`;
             document.getElementById('bookingItemDuration').textContent = durationText;
             document.getElementById('booking-type').value = type;
             document.getElementById('booking-item-id').value = id;
@@ -1839,7 +1839,7 @@
                     Duration: ${duration} Hours<br>
                     Check-in: ${checkIn || 'Not selected'}<br>
                     Check-out: ${checkOut || 'Not selected'}<br>
-                    <strong>Total: $${total}</strong>
+                    <strong>Total: Rs.${total}</strong>
                 `;
             } else {
                 summary.innerHTML = `
@@ -1941,10 +1941,10 @@
                 
                 // Price filter (using 24hr price)
                 if (priceFilter !== 'all') {
-                    if (priceFilter === '0-150' && room.price24 > 150) return false;
-                    if (priceFilter === '151-250' && (room.price24 < 151 || room.price24 > 250)) return false;
-                    if (priceFilter === '251-500' && (room.price24 < 251 || room.price24 > 500)) return false;
-                    if (priceFilter === '501+' && room.price24 < 501) return false;
+                    if (priceFilter === '0-1500' && room.price24 > 150) return false;
+                    if (priceFilter === '1501-2500' && (room.price24 < 151 || room.price24 > 250)) return false;
+                    if (priceFilter === '2510-5000' && (room.price24 < 251 || room.price24 > 500)) return false;
+                    if (priceFilter === '5001+' && room.price24 < 501) return false;
                 }
                 
                 // Capacity filter
@@ -2049,7 +2049,7 @@
                     <td><img src="${room.image}" alt="${room.name}" style="width: 60px; height: 40px; object-fit: cover;"></td>
                     <td>${room.name}</td>
                     <td>${room.type}</td>
-                    <td>$${room.price24}/24hrs<br>$${room.price12}/12hrs</td>
+                    <td>Rs.${room.price24}/24hrs<br>Rs.${room.price12}/12hrs</td>
                     <td><span class="badge bg-success">${room.status}</span></td>
                     <td>
                         <button class="btn btn-sm btn-warning me-1" onclick="openEditRoomModal(${room.id})">
@@ -2077,7 +2077,7 @@
                     <td>${hall.name}</td>
                     <td>${hall.type}</td>
                     <td>${hall.capacity}</td>
-                    <td>$${hall.price}</td>
+                    <td>Rs.${hall.price}</td>
                     <td><span class="badge bg-success">${hall.status}</span></td>
                     <td>
                         <button class="btn btn-sm btn-warning me-1" onclick="openEditHallModal(${hall.id})">
