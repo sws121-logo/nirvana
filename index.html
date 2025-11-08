@@ -238,6 +238,14 @@
             border-color: var(--secondary-color);
             box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25);
         }
+        
+        .edit-form {
+            display: none;
+        }
+        
+        .edit-form.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -608,7 +616,7 @@
                     <h4 class="mb-3">Find Us</h4>
                     <div class="ratio ratio-16x9">
                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.9503398796587!2d-73.99104868459418!3d40.74255177932881!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a3c1dc303b%3A0x9f03dcea7c0d6f3a!2sTimes%20Square%2C%20New%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1622549402951!5m2!1sen!2sin" 
-                                style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                            style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
             </div>
@@ -996,6 +1004,68 @@
         </div>
     </div>
 
+    <!-- Edit Room Modal -->
+    <div class="modal fade" id="editRoomModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Room</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-room-form">
+                        <input type="hidden" id="edit-room-id">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit-room-name" class="form-label">Room Name</label>
+                                <input type="text" class="form-control" id="edit-room-name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit-room-type" class="form-label">Room Type</label>
+                                <select class="form-select" id="edit-room-type" required>
+                                    <option value="">Select Type</option>
+                                    <option value="single">Single</option>
+                                    <option value="double">Double</option>
+                                    <option value="suite">Suite</option>
+                                    <option value="deluxe">Deluxe</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit-room-price" class="form-label">Price per Night ($)</label>
+                                <input type="number" class="form-control" id="edit-room-price" min="0" step="0.01" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit-room-capacity" class="form-label">Capacity</label>
+                                <input type="number" class="form-control" id="edit-room-capacity" min="1" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-room-description" class="form-label">Description</label>
+                            <textarea class="form-control" id="edit-room-description" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-room-amenities" class="form-label">Amenities</label>
+                            <div id="edit-room-amenities-checkboxes" class="row">
+                                <!-- Amenities checkboxes will be loaded here by JavaScript -->
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-room-image" class="form-label">Room Image URL</label>
+                            <input type="text" class="form-control" id="edit-room-image">
+                            <div class="form-text">Change the room image URL</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="updateRoom()">Update Room</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Add Hall Modal -->
     <div class="modal fade" id="addHallModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -1055,6 +1125,66 @@
         </div>
     </div>
 
+    <!-- Edit Hall Modal -->
+    <div class="modal fade" id="editHallModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Hall</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-hall-form">
+                        <input type="hidden" id="edit-hall-id">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit-hall-name" class="form-label">Hall Name</label>
+                                <input type="text" class="form-control" id="edit-hall-name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit-hall-type" class="form-label">Hall Type</label>
+                                <select class="form-select" id="edit-hall-type" required>
+                                    <option value="">Select Type</option>
+                                    <option value="conference">Conference Hall</option>
+                                    <option value="party">Party Hall</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit-hall-capacity" class="form-label">Capacity</label>
+                                <input type="number" class="form-control" id="edit-hall-capacity" min="1" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit-hall-price" class="form-label">Price per Event ($)</label>
+                                <input type="number" class="form-control" id="edit-hall-price" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-hall-description" class="form-label">Description</label>
+                            <textarea class="form-control" id="edit-hall-description" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-hall-amenities" class="form-label">Amenities</label>
+                            <div id="edit-hall-amenities-checkboxes" class="row">
+                                <!-- Amenities checkboxes will be loaded here by JavaScript -->
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-hall-image" class="form-label">Hall Image URL</label>
+                            <input type="text" class="form-control" id="edit-hall-image">
+                            <div class="form-text">Change the hall image URL</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="updateHall()">Update Hall</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Add Amenity Modal -->
     <div class="modal fade" id="addAmenityModal" tabindex="-1">
         <div class="modal-dialog">
@@ -1087,6 +1217,44 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary" onclick="addNewAmenity()">Add Amenity</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Amenity Modal -->
+    <div class="modal fade" id="editAmenityModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Amenity</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-amenity-form">
+                        <input type="hidden" id="edit-amenity-id">
+                        <div class="mb-3">
+                            <label for="edit-amenity-name" class="form-label">Amenity Name</label>
+                            <input type="text" class="form-control" id="edit-amenity-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-amenity-type" class="form-label">Amenity Type</label>
+                            <select class="form-select" id="edit-amenity-type" required>
+                                <option value="">Select Type</option>
+                                <option value="room">Room Amenity</option>
+                                <option value="hall">Hall Amenity</option>
+                                <option value="general">General Amenity</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-amenity-description" class="form-label">Description</label>
+                            <textarea class="form-control" id="edit-amenity-description" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="updateAmenity()">Update Amenity</button>
                 </div>
             </div>
         </div>
@@ -1597,7 +1765,7 @@
                     <td>$${room.price}</td>
                     <td><span class="badge bg-success">${room.status}</span></td>
                     <td>
-                        <button class="btn btn-sm btn-warning me-1" onclick="editRoom(${room.id})">
+                        <button class="btn btn-sm btn-warning me-1" onclick="openEditRoomModal(${room.id})">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button class="btn btn-sm btn-danger" onclick="deleteRoom(${room.id})">
@@ -1625,7 +1793,7 @@
                     <td>$${hall.price}</td>
                     <td><span class="badge bg-success">${hall.status}</span></td>
                     <td>
-                        <button class="btn btn-sm btn-warning me-1" onclick="editHall(${hall.id})">
+                        <button class="btn btn-sm btn-warning me-1" onclick="openEditHallModal(${hall.id})">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button class="btn btn-sm btn-danger" onclick="deleteHall(${hall.id})">
@@ -1650,7 +1818,7 @@
                     <td>${amenity.type}</td>
                     <td>${amenity.description}</td>
                     <td>
-                        <button class="btn btn-sm btn-warning me-1" onclick="editAmenity(${amenity.id})">
+                        <button class="btn btn-sm btn-warning me-1" onclick="openEditAmenityModal(${amenity.id})">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button class="btn btn-sm btn-danger" onclick="deleteAmenity(${amenity.id})">
@@ -1744,6 +1912,206 @@
                 `;
                 hallAmenitiesContainer.appendChild(col);
             });
+        }
+
+        // Load edit room amenities checkboxes
+        function loadEditRoomAmenitiesCheckboxes(roomId) {
+            const editRoomAmenitiesContainer = document.getElementById('edit-room-amenities-checkboxes');
+            editRoomAmenitiesContainer.innerHTML = '';
+            
+            // Filter amenities by type
+            const roomAmenities = hotelData.amenities.filter(a => a.type === 'room' || a.type === 'general');
+            const room = hotelData.rooms.find(r => r.id === roomId);
+            
+            // Create checkboxes for room amenities
+            roomAmenities.forEach(amenity => {
+                const isChecked = room.amenities.includes(amenity.id);
+                const col = document.createElement('div');
+                col.className = 'col-md-6';
+                col.innerHTML = `
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="${amenity.id}" id="edit-room-amenity-${amenity.id}" ${isChecked ? 'checked' : ''}>
+                        <label class="form-check-label" for="edit-room-amenity-${amenity.id}">
+                            ${amenity.name}
+                        </label>
+                    </div>
+                `;
+                editRoomAmenitiesContainer.appendChild(col);
+            });
+        }
+
+        // Load edit hall amenities checkboxes
+        function loadEditHallAmenitiesCheckboxes(hallId) {
+            const editHallAmenitiesContainer = document.getElementById('edit-hall-amenities-checkboxes');
+            editHallAmenitiesContainer.innerHTML = '';
+            
+            // Filter amenities by type
+            const hallAmenities = hotelData.amenities.filter(a => a.type === 'hall' || a.type === 'general');
+            const hall = hotelData.halls.find(h => h.id === hallId);
+            
+            // Create checkboxes for hall amenities
+            hallAmenities.forEach(amenity => {
+                const isChecked = hall.amenities.includes(amenity.id);
+                const col = document.createElement('div');
+                col.className = 'col-md-6';
+                col.innerHTML = `
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="${amenity.id}" id="edit-hall-amenity-${amenity.id}" ${isChecked ? 'checked' : ''}>
+                        <label class="form-check-label" for="edit-hall-amenity-${amenity.id}">
+                            ${amenity.name}
+                        </label>
+                    </div>
+                `;
+                editHallAmenitiesContainer.appendChild(col);
+            });
+        }
+
+        // Open edit room modal
+        function openEditRoomModal(roomId) {
+            const room = hotelData.rooms.find(r => r.id === roomId);
+            if (!room) return;
+            
+            document.getElementById('edit-room-id').value = room.id;
+            document.getElementById('edit-room-name').value = room.name;
+            document.getElementById('edit-room-type').value = room.type;
+            document.getElementById('edit-room-price').value = room.price;
+            document.getElementById('edit-room-capacity').value = room.capacity;
+            document.getElementById('edit-room-description').value = room.description;
+            document.getElementById('edit-room-image').value = room.image;
+            
+            loadEditRoomAmenitiesCheckboxes(roomId);
+            
+            const modal = new bootstrap.Modal(document.getElementById('editRoomModal'));
+            modal.show();
+        }
+
+        // Update room
+        function updateRoom() {
+            const roomId = parseInt(document.getElementById('edit-room-id').value);
+            const roomIndex = hotelData.rooms.findIndex(r => r.id === roomId);
+            
+            if (roomIndex === -1) return;
+            
+            // Get selected amenities
+            const selectedAmenities = [];
+            document.querySelectorAll('#edit-room-amenities-checkboxes input:checked').forEach(checkbox => {
+                selectedAmenities.push(parseInt(checkbox.value));
+            });
+            
+            hotelData.rooms[roomIndex] = {
+                ...hotelData.rooms[roomIndex],
+                name: document.getElementById('edit-room-name').value,
+                type: document.getElementById('edit-room-type').value,
+                price: parseFloat(document.getElementById('edit-room-price').value),
+                capacity: parseInt(document.getElementById('edit-room-capacity').value),
+                description: document.getElementById('edit-room-description').value,
+                amenities: selectedAmenities,
+                image: document.getElementById('edit-room-image').value || hotelData.rooms[roomIndex].image
+            };
+            
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editRoomModal'));
+            modal.hide();
+            
+            // Reload data
+            loadAdminRooms();
+            loadAllRooms();
+            loadFeaturedRooms();
+            
+            alert('Room updated successfully!');
+        }
+
+        // Open edit hall modal
+        function openEditHallModal(hallId) {
+            const hall = hotelData.halls.find(h => h.id === hallId);
+            if (!hall) return;
+            
+            document.getElementById('edit-hall-id').value = hall.id;
+            document.getElementById('edit-hall-name').value = hall.name;
+            document.getElementById('edit-hall-type').value = hall.type;
+            document.getElementById('edit-hall-capacity').value = hall.capacity;
+            document.getElementById('edit-hall-price').value = hall.price;
+            document.getElementById('edit-hall-description').value = hall.description;
+            document.getElementById('edit-hall-image').value = hall.image;
+            
+            loadEditHallAmenitiesCheckboxes(hallId);
+            
+            const modal = new bootstrap.Modal(document.getElementById('editHallModal'));
+            modal.show();
+        }
+
+        // Update hall
+        function updateHall() {
+            const hallId = parseInt(document.getElementById('edit-hall-id').value);
+            const hallIndex = hotelData.halls.findIndex(h => h.id === hallId);
+            
+            if (hallIndex === -1) return;
+            
+            // Get selected amenities
+            const selectedAmenities = [];
+            document.querySelectorAll('#edit-hall-amenities-checkboxes input:checked').forEach(checkbox => {
+                selectedAmenities.push(parseInt(checkbox.value));
+            });
+            
+            hotelData.halls[hallIndex] = {
+                ...hotelData.halls[hallIndex],
+                name: document.getElementById('edit-hall-name').value,
+                type: document.getElementById('edit-hall-type').value,
+                capacity: parseInt(document.getElementById('edit-hall-capacity').value),
+                price: parseFloat(document.getElementById('edit-hall-price').value),
+                description: document.getElementById('edit-hall-description').value,
+                amenities: selectedAmenities,
+                image: document.getElementById('edit-hall-image').value || hotelData.halls[hallIndex].image
+            };
+            
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editHallModal'));
+            modal.hide();
+            
+            // Reload data
+            loadAdminHalls();
+            loadAllHalls();
+            
+            alert('Hall updated successfully!');
+        }
+
+        // Open edit amenity modal
+        function openEditAmenityModal(amenityId) {
+            const amenity = hotelData.amenities.find(a => a.id === amenityId);
+            if (!amenity) return;
+            
+            document.getElementById('edit-amenity-id').value = amenity.id;
+            document.getElementById('edit-amenity-name').value = amenity.name;
+            document.getElementById('edit-amenity-type').value = amenity.type;
+            document.getElementById('edit-amenity-description').value = amenity.description;
+            
+            const modal = new bootstrap.Modal(document.getElementById('editAmenityModal'));
+            modal.show();
+        }
+
+        // Update amenity
+        function updateAmenity() {
+            const amenityId = parseInt(document.getElementById('edit-amenity-id').value);
+            const amenityIndex = hotelData.amenities.findIndex(a => a.id === amenityId);
+            
+            if (amenityIndex === -1) return;
+            
+            hotelData.amenities[amenityIndex] = {
+                ...hotelData.amenities[amenityIndex],
+                name: document.getElementById('edit-amenity-name').value,
+                type: document.getElementById('edit-amenity-type').value,
+                description: document.getElementById('edit-amenity-description').value
+            };
+            
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editAmenityModal'));
+            modal.hide();
+            
+            // Reload data
+            loadAdminAmenities();
+            loadAmenitiesCheckboxes();
+            
+            alert('Amenity updated successfully!');
         }
 
         // Add new room
@@ -1872,11 +2240,7 @@
             alert('Amenity added successfully!');
         }
 
-        // Placeholder functions for edit and delete operations
-        function editRoom(id) {
-            alert(`Edit room with ID: ${id} - This would open an edit form in a real application`);
-        }
-
+        // Delete room
         function deleteRoom(id) {
             if (confirm('Are you sure you want to delete this room?')) {
                 hotelData.rooms = hotelData.rooms.filter(room => room.id !== id);
@@ -1888,10 +2252,7 @@
             }
         }
 
-        function editHall(id) {
-            alert(`Edit hall with ID: ${id} - This would open an edit form in a real application`);
-        }
-
+        // Delete hall
         function deleteHall(id) {
             if (confirm('Are you sure you want to delete this hall?')) {
                 hotelData.halls = hotelData.halls.filter(hall => hall.id !== id);
@@ -1902,10 +2263,7 @@
             }
         }
 
-        function editAmenity(id) {
-            alert(`Edit amenity with ID: ${id} - This would open an edit form in a real application`);
-        }
-
+        // Delete amenity
         function deleteAmenity(id) {
             if (confirm('Are you sure you want to delete this amenity?')) {
                 hotelData.amenities = hotelData.amenities.filter(amenity => amenity.id !== id);
