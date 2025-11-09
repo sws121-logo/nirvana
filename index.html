@@ -279,6 +279,43 @@
             color: #6c757d;
         }
         
+        /* Admin Login Styles */
+        .admin-login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(26, 54, 93, 0.8), rgba(26, 54, 93, 0.9)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .admin-login-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .admin-login-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .admin-login-body {
+            padding: 30px;
+        }
+        
+        .admin-login-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+        
         /* Responsive improvements */
         
         /* Mobile navigation improvements */
@@ -822,6 +859,41 @@
         </div>
     </section>
 
+    <!-- Admin Login Page -->
+    <section id="admin-login" class="page-section">
+        <div class="admin-login-container">
+            <div class="admin-login-card">
+                <div class="admin-login-header">
+                    <div class="admin-login-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3>Admin Login</h3>
+                    <p class="mb-0">Access the admin panel</p>
+                </div>
+                <div class="admin-login-body">
+                    <form id="admin-login-form">
+                        <div class="mb-3">
+                            <label for="admin-username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="admin-username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="admin-password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="admin-password" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="#" onclick="showPage('home')" class="text-decoration-none">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Website
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Admin Panel -->
     <section id="admin" class="page-section">
         <div class="admin-panel">
@@ -831,6 +903,10 @@
                     <div class="col-lg-2 col-md-3 sidebar p-0">
                         <div class="p-3">
                             <h4 class="text-center mb-4">Admin Panel</h4>
+                            <div class="d-flex align-items-center mb-3 p-2 bg-dark rounded">
+                                <i class="fas fa-user-circle me-2"></i>
+                                <span id="admin-user-display">Administrator</span>
+                            </div>
                             <ul class="list-unstyled">
                                 <li><a href="#" class="active" onclick="showAdminSection('dashboard')"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
                                 <li><a href="#" onclick="showAdminSection('rooms-management')"><i class="fas fa-bed me-2"></i>Rooms Management</a></li>
@@ -838,7 +914,7 @@
                                 <li><a href="#" onclick="showAdminSection('amenities-management')"><i class="fas fa-concierge-bell me-2"></i>Amenities Management</a></li>
                                 <li><a href="#" onclick="showAdminSection('bookings-management')"><i class="fas fa-calendar-check me-2"></i>Bookings Management</a></li>
                                 <li><a href="#" onclick="showAdminSection('settings')"><i class="fas fa-cog me-2"></i>Settings</a></li>
-                                <li><a href="#" onclick="showPage('home')"><i class="fas fa-arrow-left me-2"></i>Back to Website</a></li>
+                                <li><a href="#" onclick="adminLogout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                             </ul>
                         </div>
                     </div>
@@ -1546,6 +1622,15 @@
     
     <!-- Custom JavaScript -->
     <script>
+        // Admin credentials
+        const ADMIN_CREDENTIALS = {
+            username: "admin",
+            password: "admin123"
+        };
+
+        // Session management
+        let isAdminLoggedIn = false;
+
         // Sample data for the application
         let hotelData = {
             rooms: [
@@ -1717,6 +1802,9 @@
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
+            // Check if admin is already logged in
+            checkAdminLoginStatus();
+            
             // Load featured rooms on home page
             loadFeaturedRooms();
             
@@ -1726,27 +1814,27 @@
             // Load all halls on halls page
             loadAllHalls();
             
-            // Load admin dashboard data
-            loadAdminDashboard();
-            
-            // Load admin rooms management
-            loadAdminRooms();
-            
-            // Load admin halls management
-            loadAdminHalls();
-            
-            // Load admin amenities management
-            loadAdminAmenities();
-            
-            // Load admin bookings management
-            loadAdminBookings();
-            
-            // Load amenities checkboxes for room and hall forms
-            loadAmenitiesCheckboxes();
+            // Load admin dashboard data if logged in
+            if (isAdminLoggedIn) {
+                loadAdminDashboard();
+                loadAdminRooms();
+                loadAdminHalls();
+                loadAdminAmenities();
+                loadAdminBookings();
+                loadAmenitiesCheckboxes();
+            }
             
             // Set minimum dates for booking
             setMinBookingDates();
         });
+
+        // Check admin login status
+        function checkAdminLoginStatus() {
+            const savedLoginStatus = localStorage.getItem('adminLoggedIn');
+            if (savedLoginStatus === 'true') {
+                isAdminLoggedIn = true;
+            }
+        }
 
         // Set minimum dates for booking forms
         function setMinBookingDates() {
@@ -1771,9 +1859,14 @@
             // Show the selected page
             document.getElementById(pageId).classList.add('active');
             
-            // If showing admin panel, ensure dashboard is visible
+            // If showing admin panel, check login status
             if (pageId === 'admin') {
-                showAdminSection('dashboard');
+                if (!isAdminLoggedIn) {
+                    showPage('admin-login');
+                    return;
+                } else {
+                    showAdminSection('dashboard');
+                }
             }
             
             // Scroll to top
@@ -1804,6 +1897,47 @@
                 activeLink.classList.add('active');
             }
         }
+
+        // Admin login function
+        function adminLogin() {
+            const username = document.getElementById('admin-username').value;
+            const password = document.getElementById('admin-password').value;
+            
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                isAdminLoggedIn = true;
+                localStorage.setItem('adminLoggedIn', 'true');
+                
+                // Load admin data
+                loadAdminDashboard();
+                loadAdminRooms();
+                loadAdminHalls();
+                loadAdminAmenities();
+                loadAdminBookings();
+                loadAmenitiesCheckboxes();
+                
+                // Show admin panel
+                showPage('admin');
+                
+                // Show success message
+                alert('Login successful! Welcome to the Admin Panel.');
+            } else {
+                alert('Invalid username or password. Please try again.');
+            }
+        }
+
+        // Admin logout function
+        function adminLogout() {
+            isAdminLoggedIn = false;
+            localStorage.removeItem('adminLoggedIn');
+            showPage('home');
+            alert('You have been logged out successfully.');
+        }
+
+        // Handle admin login form submission
+        document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            adminLogin();
+        });
 
         // Load featured rooms on home page
         function loadFeaturedRooms() {
@@ -2079,9 +2213,11 @@
             document.getElementById('booking-form').reset();
             setMinBookingDates();
             
-            // Update admin dashboard
-            loadAdminDashboard();
-            loadAdminBookings();
+            // Update admin dashboard if logged in
+            if (isAdminLoggedIn) {
+                loadAdminDashboard();
+                loadAdminBookings();
+            }
             
             // Show success message
             alert('Booking confirmed successfully! Your booking has been added to the system.');
@@ -2730,19 +2866,19 @@
             if (!booking) return;
             
             alert(`Booking Details:\n
-ID: #${booking.id}
-Customer: ${booking.customer}
-Email: ${booking.email}
-Phone: ${booking.phone}
-Type: ${booking.type}
-Item: ${booking.itemName}
-Check-in: ${booking.checkIn}
-Check-out: ${booking.checkOut}
-Duration: ${booking.duration}
-Special Requests: ${booking.specialRequests || 'None'}
-Status: ${booking.status}
-Booking Date: ${booking.bookingDate}`);
-        }
+               ID: #${booking.id}
+               Customer: ${booking.customer}
+               Email: ${booking.email}
+               Phone: ${booking.phone}
+               Type: ${booking.type}
+               Item: ${booking.itemName}
+               Check-in: ${booking.checkIn}
+               Check-out: ${booking.checkOut}
+               Duration: ${booking.duration}
+               Special Requests: ${booking.specialRequests || 'None'}
+               Status: ${booking.status}
+               Booking Date: ${booking.bookingDate}`);
+                    }
 
         function editBooking(id) {
             alert(`Edit booking with ID: ${id} - This would open an edit form in a real application`);
