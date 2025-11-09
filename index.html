@@ -2022,59 +2022,86 @@
 
         // Load all halls on halls page
         function loadAllHalls(filteredHalls = null) {
-            const conferenceHallsContainer = document.getElementById('conference-halls');
-            const partyHallsContainer = document.getElementById('party-halls');
-            
-            conferenceHallsContainer.innerHTML = '';
-            partyHallsContainer.innerHTML = '';
-            
-            const hallsToDisplay = filteredHalls || hotelData.halls;
-            
-            if (hallsToDisplay.length === 0) {
-                conferenceHallsContainer.innerHTML = `
-                    <div class="col-12 text-center py-5">
-                        <h4>No halls found matching your criteria</h4>
-                        <p>Try adjusting your filters</p>
-                    </div>
-                `;
-                return;
+           const conferenceHallsContainer = document.getElementById('conference-halls');
+           const partyHallsContainer = document.getElementById('party-halls');
+    
+           conferenceHallsContainer.innerHTML = '';
+           partyHallsContainer.innerHTML = '';
+    
+           const hallsToDisplay = filteredHalls || hotelData.halls;
+    
+           if (hallsToDisplay.length === 0) {
+              const noResultsMessage = `
+                <div class="col-12 text-center py-5">
+                   <h4>No halls found matching your criteria</h4>
+                   <p>Try adjusting your filters</p>
+                </div>
+             `;
+             conferenceHallsContainer.innerHTML = noResultsMessage;
+             partyHallsContainer.innerHTML = noResultsMessage;
+             return;
             }
-            
-            hallsToDisplay.forEach(hall => {
-                // Get hall amenities
-                const hallAmenities = hotelData.amenities.filter(amenity => 
-                    hall.amenities.includes(amenity.id)
-                );
-                
-                const hallCard = document.createElement('div');
-                hallCard.className = 'col-md-6 mb-4';
-                hallCard.innerHTML = `
-                    <div class="card card-3d h-100">
-                        <div class="card-image" style="background-image: url('${hall.image}')"></div>
-                        <div class="card-body">
-                            <h5 class="card-title">${hall.name}</h5>
-                            <p class="card-text">${hall.description}</p>
-                            <p><strong>Capacity:</strong> ${hall.capacity} people</p>
-                            <ul class="amenities-list">
-                                ${hallAmenities.slice(0, 3).map(amenity => `<li>${amenity.name}</li>`).join('')}
-                                ${hallAmenities.length > 3 ? `<li>+${hallAmenities.length - 3} more</li>` : ''}
-                            </ul>
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <span class="h5 text-primary">Rs.${hall.price}/event</span>
-                                <button class="btn btn-primary" onclick="openBookingModal('hall', ${hall.id})">Book Now</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                if (hall.type === 'conference') {
-                    conferenceHallsContainer.appendChild(hallCard);
-                } else {
-                    partyHallsContainer.appendChild(hallCard);
-                }
-            });
-        }
-
+    
+           // Separate halls by type
+           const conferenceHalls = hallsToDisplay.filter(hall => hall.type === 'conference');
+           const partyHalls = hallsToDisplay.filter(hall => hall.type === 'party');
+    
+            // Display conference halls
+           if (conferenceHalls.length === 0) {
+              conferenceHallsContainer.innerHTML = `
+                 <div class="col-12 text-center py-5">
+                    <h4>No conference halls found matching your criteria</h4>
+                    <p>Try adjusting your filters</p>
+                 </div>
+                 `;
+           } else {
+              conferenceHalls.forEach(hall => {
+                 createHallCard(hall, conferenceHallsContainer);
+             });
+          }
+    
+         // Display party halls
+         if (partyHalls.length === 0) {
+              partyHallsContainer.innerHTML = `
+                 <div class="col-12 text-center py-5">
+                      <h4>No party halls found matching your criteria</h4>
+                      <p>Try adjusting your filters</p>
+                 </div>
+               `;
+         } else {
+             partyHalls.forEach(hall => {
+             createHallCard(hall, partyHallsContainer);
+           });
+           }
+         }
+        function createHallCard(hall, container) {
+           // Get hall amenities
+           const hallAmenities = hotelData.amenities.filter(amenity => 
+                hall.amenities.includes(amenity.id)
+               );
+    
+           const hallCard = document.createElement('div');
+           hallCard.className = 'col-md-6 mb-4';
+           hallCard.innerHTML = `
+              <div class="card card-3d h-100">
+                <div class="card-image" style="background-image: url('${hall.image}')"></div>
+                <div class="card-body">
+                  <h5 class="card-title">${hall.name}</h5>
+                  <p class="card-text">${hall.description}</p>
+                  <p><strong>Capacity:</strong> ${hall.capacity} people</p>
+                  <ul class="amenities-list">
+                    ${hallAmenities.slice(0, 3).map(amenity => `<li>${amenity.name}</li>`).join('')}
+                    ${hallAmenities.length > 3 ? `<li>+${hallAmenities.length - 3} more</li>` : ''}
+                  </ul>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 text-primary">Rs.${hall.price}/event</span>
+                    <button class="btn btn-primary" onclick="openBookingModal('hall', ${hall.id})">Book Now</button>
+                  </div>
+                </div>
+             </div>
+             `;
+            container.appendChild(hallCard);
+           }
         // Open booking modal
         function openBookingModal(type, id) {
             let item, title, price, durationText;
@@ -2275,35 +2302,46 @@
 
         // Apply hall filters
         function applyHallFilters() {
-            const searchTerm = document.getElementById('hall-search').value.toLowerCase();
-            const typeFilter = document.getElementById('hall-type-filter').value;
-            const capacityFilter = document.getElementById('hall-capacity-filter').value;
-            
-            const filteredHalls = hotelData.halls.filter(hall => {
-                // Search filter
-                if (searchTerm && !hall.name.toLowerCase().includes(searchTerm) && 
-                    !hall.description.toLowerCase().includes(searchTerm)) {
+              const searchTerm = document.getElementById('hall-search').value.toLowerCase();
+              const typeFilter = document.getElementById('hall-type-filter').value;
+              const capacityFilter = document.getElementById('hall-capacity-filter').value;
+    
+              const filteredHalls = hotelData.halls.filter(hall => {
+                  // Search filter
+                 if (searchTerm && !hall.name.toLowerCase().includes(searchTerm) && 
+                      !hall.description.toLowerCase().includes(searchTerm)) {
+                      return false;
+                    }
+        
+                 // Type filter
+                 if (typeFilter !== 'all' && hall.type !== typeFilter) {
                     return false;
-                }
-                
-                // Type filter
-                if (typeFilter !== 'all' && hall.type !== typeFilter) {
-                    return false;
-                }
-                
+                   }
+        
                 // Capacity filter
                 if (capacityFilter !== 'all') {
-                    if (capacityFilter === '0-50' && hall.capacity > 50) return false;
-                    if (capacityFilter === '51-100' && (hall.capacity < 51 || hall.capacity > 100)) return false;
-                    if (capacityFilter === '101-200' && (hall.capacity < 101 || hall.capacity > 200)) return false;
-                    if (capacityFilter === '201+' && hall.capacity < 201) return false;
-                }
-                
+                   if (capacityFilter === '0-50' && hall.capacity > 50) return false;
+                   if (capacityFilter === '51-100' && (hall.capacity < 51 || hall.capacity > 100)) return false;
+                   if (capacityFilter === '101-200' && (hall.capacity < 101 || hall.capacity > 200)) return false;
+                   if (capacityFilter === '201+' && hall.capacity < 201) return false;
+                   }
+        
                 return true;
-            });
-            
-            loadAllHalls(filteredHalls);
-        }
+              });
+              // Get the active tab to determine which halls to show
+              const activeTab = document.querySelector('#hallsTab .nav-link.active').getAttribute('href');
+    
+              // If a specific hall type is selected in the filter, activate the corresponding tab
+              if (typeFilter !== 'all') {
+                   const targetTab = typeFilter === 'conference' ? '#conference' : '#party';
+                   const tabTrigger = document.querySelector(`[href="${targetTab}"]`);
+                   if (tabTrigger) {
+                     new bootstrap.Tab(tabTrigger).show();
+                    }
+                 }
+    
+             loadAllHalls(filteredHalls);
+            }
 
         // Reset hall filters
         function resetHallFilters() {
